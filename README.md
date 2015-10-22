@@ -1,8 +1,6 @@
 # BIOE421_RoboHand Final Project 
 
-### Robo-Testing Hand
-### Michaela Dimoff & Paul Greenfield
-### Team02_TeamGuinness
+### Robo-Testing Hand### Michaela Dimoff & Paul Greenfield### Team02_TeamGuinness
 
 __Brainstorming__
 
