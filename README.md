@@ -14,5 +14,5 @@ Use Cases:
 * Changing the speed
 * Changing the diameter of the residual limb
 * Changing the direction of motion from extension/flexion to ulnar/radial deviation
-* This is currently outside of the scope but would be cool to keep in mind for the future
+	* This is currently outside of the scope but would be cool to keep in mind for the future
 
