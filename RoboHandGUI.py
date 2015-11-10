@@ -69,14 +69,20 @@ def writeConfig(*args):
 
 #Use your config file to call your separate program to actually write the Gcode file
 
-#def configure(*args):
+def configure(*args):
 
-#	configParam = writeConfig(args)
-#	import pulse
-	
+	configParam = writeConfig(args)
+	import DoTheRobot
+	DoTheRobot.writeGcode(configParam)
+	gcodePath = initGcodeDir(configParam["filenameStr"])
+	h = open(configParam["gcodenameStr"],'r')
+	i = open(gcodepath+".gcode",'w')
+	for line in h:
+		i.writelines(line)
+	h.close()
+	i.close()
 
-			
-
+	return
 
 #Define your mainframe widget that codes for your main window and define its title and grid layout
 
@@ -113,7 +119,7 @@ ttk.Label(mainframe, text="degrees").grid(column=3, row=2, sticky=W)
 
 ttk.Label(mainframe, text="Number of Repetitions =").grid(column=1, row=3, sticky=E)
 
-#Define your button
+#Define your button to go
 
 ttk.Button(mainframe, text="JAPICA!",command=writeConfig).grid(column=3, row=4, sticky=(E, S))
 
