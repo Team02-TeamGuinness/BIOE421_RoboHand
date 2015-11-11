@@ -17,8 +17,8 @@ def dateName():
 #Define you time
 
 def timeName():
-
 	timeStr = strftime("%I-%M-%S %p", localtime())
+	return timeStr
 
 #Initialize your directory for storing your final Gcode
 
@@ -26,63 +26,53 @@ def initGcodeDir(filename):
 
 	dateStr = dateName()
 	timeStr = timeName()
-
 	dirPath = "./Gcode/{0}".format(dateStr)
 	if not os.path.exists(dirPath): os.makedirs(dirPath)
 	filepath = "{0}/{1} {2}".format(dirPath,timeStr,filename)
-	return filePath
+	return filepath
 
-#Write your config file using the inputs from the GUI
+#Write your Gcode file using the inputs from the GUI
 
-def writeConfig(*args):
+def writeGcode(*args):
 
+	if flexion.get() > 80 or extension.get() > 80:
+		raise Exception("You Done Fucked Up")
+	path = initGcodeDir(filename.get())
 	configParam = {
-			"filenameStr": str("Test"), #filename.get()),
-			"gcodenameStr": str("Test") + ".gcode", #filename.get()) + ".gcode",
+			"filenameStr": path,
 			"flexionStr": str(flexion.get()),
 			"extensionStr": str(extension.get()),
 			"repetitionStr": str(repetition.get())
 			}
 
 	try:
-		f = open("config.py",'w')
+		f = open(configParam["filenameStr"] + ".gcode",'w')
 	except:
 		print("Error - Open")
-		error.set("Cannot open config.py")
+		error.set("Cannot open" + configParam["filenameStr"] + ".gcode")
 
-	filetext = (
-			"#File Info\n"
-			"fname = '{0}'\n"
-			"f = open(fname,'w')\n\n"
-			"#Robo-Hand Run Parameters\n"
-			"flexion = {1} #degrees\n"
-			"extension = {2} #degrees\n"
-			"repetitions = {3}\n"
-			).format(configParam["gcodenameStr"],
-			configParam["flexionStr"],
-			configParam["extensionStr"],
-			configParam["repetitionStr"]
-			)
+	header = (
+			";********File Info********\n"
+			";filename = {0}\n"
+			";flexion = {1} degrees\n"
+			";extension = {2} degrees\n"
+			";repetitions = {3}\n" 
+			";********Robo-Hand Run Parameters Gcode Commands********\n"
+			"G28 X\n").format(configParam["filenameStr"],
+				configParam["flexionStr"],
+				configParam["extensionStr"],
+				configParam["repetitionStr"])
+	body = ""
+	for i in range(repetition.get()):
+		if (flexion.get()):
+			body += "G0 X{0}\n".format(configParam["flexionStr"])
+		if (extension.get()):
+			body += "G0 X{0}\n".format(configParam["extensionStr"])
+		body += "G4 P500\n" + "G28 X\n"			
 
-	f.writelines(filetext)
+
+	f.writelines(header+body)
 	f.close()
-
-#Use your config file to call your separate program to actually write the Gcode file
-
-def configure(*args):
-
-	configParam = writeConfig(args)
-	import DoTheRobot
-	DoTheRobot.writeGcode(configParam)
-	gcodePath = initGcodeDir(configParam["filenameStr"])
-	h = open(configParam["gcodenameStr"],'r')
-	i = open(gcodepath+".gcode",'w')
-	for line in h:
-		i.writelines(line)
-	h.close()
-	i.close()
-
-	return
 
 #Define your mainframe widget that codes for your main window and define its title and grid layout
 
@@ -96,9 +86,10 @@ mainframe.rowconfigure(0, weight=1)
 
 #Define the flexion, extension, and repetition entry boxes and place them within the main window's grid layout
 
-flexion = StringVar()
-extension = StringVar()
-repetition = StringVar()
+flexion = IntVar()
+extension = IntVar()
+repetition = IntVar()
+filename = StringVar()
 
 flexion_entry = ttk.Entry(mainframe, width=7, textvariable=flexion)
 flexion_entry.grid(column=2, row=1, sticky=(W, E))
@@ -108,6 +99,9 @@ extension_entry.grid(column=2, row=2, sticky=(W, E))
 
 repetition_entry = ttk.Entry(mainframe, width=7, textvariable=repetition)
 repetition_entry.grid(column=2, row=3, sticky=(W, E))
+
+filename_entry = ttk.Entry(mainframe, width=7, textvariable=filename)
+filename_entry.grid(column=2, row=4, sticky=(W, E))
 
 #Define the labels for the previously defined user-input entry boxes
 
@@ -119,9 +113,11 @@ ttk.Label(mainframe, text="degrees").grid(column=3, row=2, sticky=W)
 
 ttk.Label(mainframe, text="Number of Repetitions =").grid(column=1, row=3, sticky=E)
 
+ttk.Label(mainframe, text="Filename").grid(column=1, row=4, sticky=E)
+
 #Define your button to go
 
-ttk.Button(mainframe, text="JAPICA!",command=writeConfig).grid(column=3, row=4, sticky=(E, S))
+ttk.Button(mainframe, text="JAPICA!",command=writeGcode).grid(column=3, row=4, sticky=(E, S))
 
 #Shortcuts and running
 
@@ -130,6 +126,7 @@ for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
 flexion_entry.focus()
 extension_entry.focus()
 repetition_entry.focus()
+filename_entry.focus()
 
 root.mainloop()
 
