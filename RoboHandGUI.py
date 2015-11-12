@@ -36,7 +36,7 @@ def initGcodeDir(filename):
 def writeGcode(*args):
 
 	if flexion.get() > 80 or extension.get() > 80:
-		raise Exception("You Done Fucked Up")
+		raise Exception("You Done Messed Up")
 	path = initGcodeDir(filename.get())
 	configParam = {
 			"filenameStr": path,
@@ -58,7 +58,7 @@ def writeGcode(*args):
 			";extension = {2} degrees\n"
 			";repetitions = {3}\n" 
 			";********Robo-Hand Run Parameters Gcode Commands********\n"
-			"G28 X\n").format(configParam["filenameStr"],
+			"G92 X0\n").format(configParam["filenameStr"],
 				configParam["flexionStr"],
 				configParam["extensionStr"],
 				configParam["repetitionStr"])
@@ -66,9 +66,15 @@ def writeGcode(*args):
 	for i in range(repetition.get()):
 		if (flexion.get()):
 			body += "G0 X{0}\n".format(configParam["flexionStr"])
+			body += "G4 P500\n"
+			body += "G0 X-{0}\n".format(configParam["flexionStr"])
+			body += "G4 P500\n"
 		if (extension.get()):
 			body += "G0 X{0}\n".format(configParam["extensionStr"])
-		body += "G4 P500\n" + "G28 X\n"			
+			body += "G4 P500\n"
+			body += "G0 X-{0}\n".format(configParam["extensionStr"])
+			body += "G4 P500\n"
+		#body += "G4 P500\n" + "G28 X\n"			
 
 
 	f.writelines(header+body)
