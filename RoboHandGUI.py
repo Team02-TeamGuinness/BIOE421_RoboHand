@@ -2,10 +2,17 @@
 
 #First import the tkinter modules from Python v.3
 
-from tkinter import *
-from tkinter import ttk
+from Tkinter import *
+from ttk import * 
 from time import strftime, localtime
 import os
+from printrun.printcore import printcore
+from printrun import gcoder
+
+
+
+PULLEYCIRC = 39.9925 #mm/rev (calculated using the pulley pitch diameter)
+MOTORSTEPANGLE = 5. #steps/mm
 
 #Define your date
 
@@ -40,7 +47,7 @@ def writeGcode(*args):
 	path = initGcodeDir(filename.get())
 	configParam = {
 			"filenameStr": path,
-			"flexionStr": str(flexion.get()),
+			"flexionStr": str(round((float(flexion.get())/360.)*(PULLEYCIRC)*(MOTORSTEPANGLE),3)),
 			"extensionStr": str(extension.get()),
 			"repetitionStr": str(repetition.get())
 			}
@@ -70,22 +77,27 @@ def writeGcode(*args):
 			body += "G0 X-{0}\n".format(configParam["flexionStr"])
 			body += "G4 P500\n"
 		if (extension.get()):
-			body += "G0 X{0}\n".format(configParam["extensionStr"])
-			body += "G4 P500\n"
 			body += "G0 X-{0}\n".format(configParam["extensionStr"])
 			body += "G4 P500\n"
-		#body += "G4 P500\n" + "G28 X\n"			
-
+			body += "G0 X{0}\n".format(configParam["extensionStr"])
+			body += "G4 P500\n"			
 
 	f.writelines(header+body)
 	f.close()
+
+	#Send your generated Gcode directly to the printer
+
+	p = printcore('/dev/ttyACM0',115200)
+	gcode = [i.strip() for i in open(path + '.gcode')]
+	gcode = gcoder.LightGCode(gcode)
+	p.startprint(gcode)
 
 #Define your mainframe widget that codes for your main window and define its title and grid layout
 
 root = Tk()
 root.title("Robo-Hand Control Center")
 
-mainframe = ttk.Frame(root, padding="3 3 12 12")
+mainframe = Frame(root, padding="3 3 12 12")
 mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
 mainframe.columnconfigure(0, weight=1)
 mainframe.rowconfigure(0, weight=1)
@@ -97,33 +109,33 @@ extension = IntVar()
 repetition = IntVar()
 filename = StringVar()
 
-flexion_entry = ttk.Entry(mainframe, width=7, textvariable=flexion)
+flexion_entry = Entry(mainframe, width=7, textvariable=flexion)
 flexion_entry.grid(column=2, row=1, sticky=(W, E))
 
-extension_entry = ttk.Entry(mainframe, width=7, textvariable=extension)
+extension_entry = Entry(mainframe, width=7, textvariable=extension)
 extension_entry.grid(column=2, row=2, sticky=(W, E))
 
-repetition_entry = ttk.Entry(mainframe, width=7, textvariable=repetition)
+repetition_entry = Entry(mainframe, width=7, textvariable=repetition)
 repetition_entry.grid(column=2, row=3, sticky=(W, E))
 
-filename_entry = ttk.Entry(mainframe, width=7, textvariable=filename)
+filename_entry = Entry(mainframe, width=7, textvariable=filename)
 filename_entry.grid(column=2, row=4, sticky=(W, E))
 
 #Define the labels for the previously defined user-input entry boxes
 
-ttk.Label(mainframe, text="Flexion =").grid(column=1, row=1, sticky=E)
-ttk.Label(mainframe, text="degrees").grid(column=3, row=1, sticky=W)
+Label(mainframe, text="Flexion =").grid(column=1, row=1, sticky=E)
+Label(mainframe, text="degrees").grid(column=3, row=1, sticky=W)
 
-ttk.Label(mainframe, text="Extension =").grid(column=1, row=2, sticky=E)
-ttk.Label(mainframe, text="degrees").grid(column=3, row=2, sticky=W)
+Label(mainframe, text="Extension =").grid(column=1, row=2, sticky=E)
+Label(mainframe, text="degrees").grid(column=3, row=2, sticky=W)
 
-ttk.Label(mainframe, text="Number of Repetitions =").grid(column=1, row=3, sticky=E)
+Label(mainframe, text="Number of Repetitions =").grid(column=1, row=3, sticky=E)
 
-ttk.Label(mainframe, text="Filename").grid(column=1, row=4, sticky=E)
+Label(mainframe, text="Filename").grid(column=1, row=4, sticky=E)
 
 #Define your button to go
 
-ttk.Button(mainframe, text="JAPICA!",command=writeGcode).grid(column=3, row=4, sticky=(E, S))
+Button(mainframe, text="JAPICA!",command=writeGcode).grid(column=3, row=4, sticky=(E, S))
 
 #Shortcuts and running
 
