@@ -8,7 +8,7 @@ from time import strftime, localtime
 import os
 from printrun.printcore import printcore
 from printrun import gcoder
-
+import numpy
 
 
 PULLEYCIRC = 39.9925 #mm/rev (calculated using the pulley pitch diameter)
