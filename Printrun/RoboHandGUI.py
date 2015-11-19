@@ -65,7 +65,7 @@ def writeGcode(*args):
 			";extension = {2} degrees\n"
 			";repetitions = {3}\n" 
 			";********Robo-Hand Run Parameters Gcode Commands********\n"
-			"G92 X0\n").format(configParam["filenameStr"],
+			"G92 X50\n").format(configParam["filenameStr"],
 				configParam["flexionStr"],
 				configParam["extensionStr"],
 				configParam["repetitionStr"])
