@@ -1,0 +1,48 @@
+;********File Info********
+;filename = ./Gcode/2015-November-19/02-07-15PMTest3
+;flexion = 1.111 degrees
+;extension = 1.111 degrees
+;repetitions = 5
+;********Robo-Hand Run Parameters Gcode Commands********
+G92 X50
+G91
+G0 X1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X1.111
+G4 P500
+G0 X1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X1.111
+G4 P500
+G0 X1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X1.111
+G4 P500
+G0 X1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X1.111
+G4 P500
+G0 X1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X-1.111
+G4 P500
+G0 X1.111
+G4 P500

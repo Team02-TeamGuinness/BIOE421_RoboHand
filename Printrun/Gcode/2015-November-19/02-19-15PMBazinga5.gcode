@@ -1,0 +1,48 @@
+;********File Info********
+;filename = ./Gcode/2015-November-19/02-19-15PMBazinga5
+;flexion = 8.332 degrees
+;extension = 4.999 degrees
+;repetitions = 5
+;********Robo-Hand Run Parameters Gcode Commands********
+G92 X50
+G91
+G0 X8.332
+G4 P500
+G0 X-8.332
+G4 P500
+G0 X-4.999
+G4 P500
+G0 X4.999
+G4 P500
+G0 X8.332
+G4 P500
+G0 X-8.332
+G4 P500
+G0 X-4.999
+G4 P500
+G0 X4.999
+G4 P500
+G0 X8.332
+G4 P500
+G0 X-8.332
+G4 P500
+G0 X-4.999
+G4 P500
+G0 X4.999
+G4 P500
+G0 X8.332
+G4 P500
+G0 X-8.332
+G4 P500
+G0 X-4.999
+G4 P500
+G0 X4.999
+G4 P500
+G0 X8.332
+G4 P500
+G0 X-8.332
+G4 P500
+G0 X-4.999
+G4 P500
+G0 X4.999
+G4 P500

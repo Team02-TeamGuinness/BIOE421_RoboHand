@@ -47,8 +47,8 @@ def writeGcode(*args):
 	path = initGcodeDir(filename.get())
 	configParam = {
 			"filenameStr": path,
-			"flexionStr": str(round((float(flexion.get())/360.)*(PULLEYCIRC)*(MOTORSTEPANGLE),3)),
-			"extensionStr": str(round((float(extension.get())/360.)*(PULLEYCIRC)*(MOTORSTEPANGLE),3)),
+			"flexionStr": str(round((float(flexion.get())/360.)*(PULLEYCIRC),3)),#*(MOTORSTEPANGLE),3)),
+			"extensionStr": str(round((float(extension.get())/360.)*(PULLEYCIRC),3)),#*(MOTORSTEPANGLE),3)),
 			"repetitionStr": str(repetition.get())
 			}
 
@@ -65,7 +65,7 @@ def writeGcode(*args):
 			";extension = {2} degrees\n"
 			";repetitions = {3}\n" 
 			";********Robo-Hand Run Parameters Gcode Commands********\n"
-			"G92 X50\n").format(configParam["filenameStr"],
+			"G92 X50\nG91\n").format(configParam["filenameStr"],
 				configParam["flexionStr"],
 				configParam["extensionStr"],
 				configParam["repetitionStr"])
@@ -88,7 +88,7 @@ def writeGcode(*args):
 	#Send your generated Gcode directly to the printer
 
 	try:
-		command = "python printcore.py {0} {1}.gcode".format(os.path.join("/", "dev", "ttyACM1"), path)
+		command = "python printcore.py {0} {1}.gcode".format(os.path.join("/", "dev", "ttyACM0"), path)
 		subprocess.call(command, shell=True)
 	except Exception:
 		pass
