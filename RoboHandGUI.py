@@ -8,7 +8,7 @@ from time import strftime, localtime
 import os
 from printrun.printcore import printcore
 from printrun import gcoder
-
+import subprocess
 
 
 PULLEYCIRC = 39.9925 #mm/rev (calculated using the pulley pitch diameter)
@@ -24,7 +24,7 @@ def dateName():
 #Define you time
 
 def timeName():
-	timeStr = strftime("%I-%M-%S %p", localtime())
+	timeStr = strftime("%I-%M-%S%p", localtime())
 	return timeStr
 
 #Initialize your directory for storing your final Gcode
@@ -35,7 +35,7 @@ def initGcodeDir(filename):
 	timeStr = timeName()
 	dirPath = "./Gcode/{0}".format(dateStr)
 	if not os.path.exists(dirPath): os.makedirs(dirPath)
-	filepath = "{0}/{1} {2}".format(dirPath,timeStr,filename)
+	filepath = "{0}/{1}{2}".format(dirPath,timeStr,filename)
 	return filepath
 
 #Write your Gcode file using the inputs from the GUI
@@ -87,10 +87,11 @@ def writeGcode(*args):
 
 	#Send your generated Gcode directly to the printer
 
-	p = printcore('/dev/ttyACM0',115200)
-	gcode = [i.strip() for i in open(path + '.gcode')]
-	gcode = gcoder.LightGCode(gcode)
-	p.startprint(gcode)
+	try:
+		command = "python printcore.py {0} {1}.gcode".format(os.path.join("/", "dev", "ttyACM1"), path)
+		subprocess.call(command, shell=True)
+	except Exception:
+		pass
 
 #Define your mainframe widget that codes for your main window and define its title and grid layout
 

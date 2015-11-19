@@ -9,6 +9,6 @@ The following milestones are a rough timeline we plan to follow this semester to
 
 1. October 29th: Email Dale Price, review code, and order Rambo and power supply
 1. November 5th: Abstract completed and turned in to OwlSpace
-1. November 12th: Build a setup similar to Dale's that involves a palm with simple flexion motion
-1. November 19th: Begin adding use cases that involve different force sensors
+1. November 12th: Build the GUI and be able to send its generated Gcode file to Pronterface and have a proof of concept for having that generated Gcode turn a motor that turns a pulley.
+1. November 19th: Finish hardware and software. Attach an eNable hand to our device and optimize motor settings/hardware for use with eNable hand
 1. December 1st: Final project is due for grading
