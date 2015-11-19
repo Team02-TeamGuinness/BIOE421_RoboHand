@@ -48,7 +48,7 @@ def writeGcode(*args):
 	configParam = {
 			"filenameStr": path,
 			"flexionStr": str(round((float(flexion.get())/360.)*(PULLEYCIRC)*(MOTORSTEPANGLE),3)),
-			"extensionStr": str(extension.get()),
+			"extensionStr": str(round((float(extension.get())/360.)*(PULLEYCIRC)*(MOTORSTEPANGLE),3)),
 			"repetitionStr": str(repetition.get())
 			}
 

@@ -1,3 +1,6 @@
+#THIS IS NOT OUR FINAL PROJECT. IT IS THE EXACT SAME CODE, HOWEVER, YOU MUST RUN THIS
+#SCRIPT IN THE SAME DIRECTORY AS PRINTRUN FOR IT TO FUNCTION
+
 #Python code for the Robo-Hand GUI
 
 #First import the tkinter modules from Python v.3
