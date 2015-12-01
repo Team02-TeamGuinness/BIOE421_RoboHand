@@ -11,7 +11,7 @@ from printrun import gcoder
 import subprocess
 
 
-PULLEYCIRC = 39.9925 #mm/rev (calculated using the pulley pitch diameter)
+PULLEYCIRC = 39.9925 #mm/rev (Calculated using the pulley pitch diameter)
 MOTORSTEPANGLE = 5. #steps/mm
 
 #Define your date
@@ -72,14 +72,14 @@ def writeGcode(*args):
 	body = ""
 	for i in range(repetition.get()):
 		if (flexion.get()):
-			body += "G0 X{0}\n".format(configParam["flexionStr"])
+			body += "G0 X{0} F500\n".format(configParam["flexionStr"])
 			body += "G4 P500\n"
-			body += "G0 X-{0}\n".format(configParam["flexionStr"])
+			body += "G0 X-{0} F500\n".format(configParam["flexionStr"])
 			body += "G4 P500\n"
 		if (extension.get()):
-			body += "G0 X-{0}\n".format(configParam["extensionStr"])
+			body += "G0 X-{0} F500\n".format(configParam["extensionStr"])
 			body += "G4 P500\n"
-			body += "G0 X{0}\n".format(configParam["extensionStr"])
+			body += "G0 X{0} F500\n".format(configParam["extensionStr"])
 			body += "G4 P500\n"			
 
 	f.writelines(header+body)
