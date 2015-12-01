@@ -41,22 +41,31 @@ def initGcodeDir(filename):
 #Write your Gcode file using the inputs from the GUI
 
 def writeGcode(*args):
-
+	
+	#Error message that will pop up if the user inputs greater than 80 degrees to stop the RoboHand from destroying itself
+	
 	if flexion.get() > 80 or extension.get() > 80:
 		raise Exception("You Done Messed Up")
+
+	#Define your path for saving and pull the numbers that the user input into the GUI to be used for writing Gcode file
+
 	path = initGcodeDir(filename.get())
 	configParam = {
 			"filenameStr": path,
-			"flexionStr": str(round((float(flexion.get())/360.)*(PULLEYCIRC),3)),#*(MOTORSTEPANGLE),3)),
-			"extensionStr": str(round((float(extension.get())/360.)*(PULLEYCIRC),3)),#*(MOTORSTEPANGLE),3)),
+			"flexionStr": str(round((float(flexion.get())/360.)*(PULLEYCIRC),3)),
+			"extensionStr": str(round((float(extension.get())/360.)*(PULLEYCIRC),3)),
 			"repetitionStr": str(repetition.get())
 			}
+
+	#Create your Gcode file that will be written to
 
 	try:
 		f = open(configParam["filenameStr"] + ".gcode",'w')
 	except:
 		print("Error - Open")
 		error.set("Cannot open" + configParam["filenameStr"] + ".gcode")
+
+	#Define the header that will be the same at the top of each of the Gcode file so the user can see what was input 
 
 	header = (
 			";********File Info********\n"
@@ -66,9 +75,12 @@ def writeGcode(*args):
 			";repetitions = {3}\n" 
 			";********Robo-Hand Run Parameters Gcode Commands********\n"
 			"G92 X50\nG91\n").format(configParam["filenameStr"],
-				configParam["flexionStr"],
-				configParam["extensionStr"],
-				configParam["repetitionStr"])
+				str(flexion.get()), #configParam["flexionStr"],
+				str(extension.get()), #configParam["extensionStr"],
+				str(repetition.get())) #configParam["repetitionStr"])
+	
+	#For loop to write the Gcode commands for the specified number of repetitions
+
 	body = ""
 	for i in range(repetition.get()):
 		if (flexion.get()):
@@ -148,6 +160,3 @@ repetition_entry.focus()
 filename_entry.focus()
 
 root.mainloop()
-
-
-
